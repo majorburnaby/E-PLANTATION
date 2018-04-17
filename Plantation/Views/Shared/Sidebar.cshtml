@@ -1,0 +1,139 @@
+﻿@model List<Plantation.Models.DB.MENU>
+
+<div>
+    <ul class="site-menu" data-plugin="menu">
+        <li class="site-menu-category">MENU NAVIGATION</li>
+        @{
+            string header = "site-menu-item has-sub";
+            string sub = "site-menu-item has-sub";
+            string itemx = "site-menu-item";
+            string url = HttpContext.Current.Request.Url.AbsolutePath.Substring(1);
+            decimal aa = 0;
+            decimal ab = 0;
+            decimal ac = 0;
+
+            foreach (var item in Model)
+            {
+                if (item.IDMENUPARENT.ToString() == null || item.IDMENUPARENT.ToString() == "" || item.IDMENUPARENT.ToString() == "0")
+                {
+                    if (Model.Count(x => x.IDMENUPARENT == item.IDMENU) > 0)
+                    {
+
+                        foreach (var item1 in Model)
+                        {
+                            if (Model.Count(x => x.IDMENUPARENT == item1.IDMENU) > 0)
+                            {
+                                if (item1.IDMENUPARENT == item.IDMENU)
+                                {
+                                    foreach (var item2 in Model)
+                                    {
+                                        if (item2.IDMENUPARENT == item1.IDMENU)
+                                        {
+                                            if (url == item2.MENUPATH)
+                                            {
+                                                aa = item.IDMENU;
+                                                ab = item1.IDMENU;
+                                                ac = item2.IDMENU;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @foreach (var item in Model)
+        {
+            if (item.IDMENUPARENT.ToString() == null || item.IDMENUPARENT.ToString() == "" || item.IDMENUPARENT.ToString() == "0")
+            {
+                if (Model.Count(x => x.IDMENUPARENT == item.IDMENU) > 0)
+                {
+                    if (item.IDMENU == aa)
+                    {
+                        header = "site-menu-item has-sub active open";
+                    }
+                    else
+                    {
+                        header = "site-menu-item has-sub";
+                    }
+                    <li class="@header">
+                        <a href="javascript:void(0)">
+                            <i class="site-menu-icon md-google-pages" aria-hidden="true"></i>
+                            <span class="site-menu-title">@item.MENUNAME</span>
+                            <span class="site-menu-arrow"></span>
+                        </a>
+                        <ul class="site-menu-sub">
+                            @foreach (var item1 in Model)
+                            {
+                                if (Model.Count(x => x.IDMENUPARENT == item1.IDMENU) > 0)
+                                {
+                                    if (item1.IDMENUPARENT == item.IDMENU)
+                                    {
+                                        if (item1.IDMENU == ab)
+                                        {
+                                            sub = "site-menu-item has-sub active open";
+                                        }
+                                        else
+                                        {
+                                            sub = "site-menu-item has-sub";
+                                        }
+                                        <li class="@sub">
+                                            <a href="javascript:void(0)">
+                                                <span class="site-menu-title">@item1.MENUNAME</span>
+                                                <span class="site-menu-arrow"></span>
+                                            </a>
+                                            <ul class="site-menu-sub">
+                                                @foreach (var item2 in Model)
+                                                {
+                                                    if (item2.IDMENUPARENT == item1.IDMENU)
+                                                    {
+                                                        if (item2.IDMENU == ac && url == item2.MENUPATH)
+                                                        {
+                                                            itemx = "site-menu-item active";
+                                                        }
+                                                        else
+                                                        {
+                                                            itemx = "site-menu-item";
+                                                        }
+                                                        <li class="@itemx">
+                                                            <a class="animsition-link" href="~/@item2.MENUPATH">
+                                                                <span class="site-menu-title">@item2.MENUNAME</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    if (item1.IDMENUPARENT == item.IDMENU)
+                                    {
+                                        <li class="site-menu-item">
+                                            <a href="~/@item1.MENUPATH">
+                                                <span class="site-menu-title">@item1.MENUNAME</span>
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    <li class="site-menu-item">
+                        <a href="~/@item.MENUPATH">
+                            <i class="site-menu-icon md-google-pages" aria-hidden="true"></i>
+                            <span class="site-menu-title">@item.MENUNAME</span>
+                        </a>
+                    </li>
+                }
+            }
+        }
+    </ul>
+</div>
