@@ -1,17 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using Plantation.Models.DB;
 using Plantation.Repository;
-using Plantation.Repository.Interface;
-using Plantation.Models.DB;
+using System.Web.Mvc;
+using DataTables;
+using Plantation.Utility;
+using System;
 
 namespace Plantation.Controllers
 {
     public class DepartmentController : Controller
     {
         private DepartmentRepository IPD = new DepartmentRepository();
+
+        public JsonResult Data()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+
+            using (var db = new Database("sqlserver", Constant.DatabaseConnection))
+            {
+                var response = new Editor(db, "Department", "SID")
+                    .Model<Department>()
+                    .Field(new Field("IDDEPARTMENT")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("DEPARTMENTNAME")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("DESCRIPTION")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("UPDATEBY").SetValue(Session["userid"].ToString()))
+                    .Field(new Field("UPDATEDATE").SetValue(DateTime.Now))
+                    .Process(request)
+                    .Data();
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: Department
         public ActionResult Index()
         {
@@ -30,27 +55,40 @@ namespace Plantation.Controllers
             return View(IPD.Find(id));
         }
 
-        //
-        // GET: /Department/Create
-        public ActionResult Create(Department department, string userid)
+        [HttpPost]
+        public JsonResult Create(Department department, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                IPD.Add(department, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    IPD.Add(department, Session["userid"].ToString());
+                }
+            }
+            catch
+            {
+                return Json("error");
             }
 
-            return View(department);
+            return Json("success");
         }
 
-        // POST: /Department/Edit/5
         [HttpPost]
-        public ActionResult Edit(Department department, string userid)
+        public JsonResult Edit(Department department, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                IPD.Update(department, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    IPD.Update(department, Session["userid"].ToString());
+                }
             }
-            return View(department);
+            catch
+            {
+                return Json("error");
+            }
+
+            return Json("success");
         }
 
         //

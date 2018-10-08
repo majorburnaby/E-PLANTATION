@@ -104,18 +104,6 @@ namespace Plantation.Controllers
             return View(IPD.Find(id));
         }
 
-        //
-        // POST: /Product/Create
-        //[HttpPost]
-        //public ActionResult Create(Product product, string userid)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        IPD.Add(product, Session["userid"].ToString());
-        //    }
-
-        //    return View(product);
-        //}
         [HttpPost]
         public JsonResult Create(Product product, string userid)
         {
@@ -134,17 +122,6 @@ namespace Plantation.Controllers
             return Json("success");
         }
 
-        //
-        // POST: /Product/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(Product product, string userid)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        IPD.Update(product, Session["userid"].ToString());
-        //    }
-        //    return View(product);
-        //}
         [HttpPost]
         public JsonResult Edit(Product product, string userid)
         {

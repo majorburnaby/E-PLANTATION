@@ -2,6 +2,7 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -25,6 +26,8 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <TypeScriptToolsVersion>2.1</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +47,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AntiXssLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AntiXSS.4.3.0\lib\net40\AntiXssLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
       <Private>True</Private>
@@ -59,33 +65,32 @@
     <Reference Include="DataTables">
       <HintPath>..\..\Plantation\Plantation\bin\DataTables.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.2.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.2.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.4.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.4.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.Web, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.4.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.WindowsServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.2.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.AI.Web, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.4.1\lib\net45\Microsoft.AI.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.4.1\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.4.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -98,6 +103,9 @@
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net45\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -107,6 +115,30 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -114,31 +146,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Web.Razor">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages.Deployment">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages.Razor">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Helpers">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\css\datatables.editor\dataTables.editor.min.css" />
-    <Content Include="assets\css\datatables.editor\editor.dataTables.min.css" />
     <Content Include="assets\css\site.css" />
     <Content Include="assets\css\site.min.css" />
     <Content Include="assets\examples\css\advanced\alertify.css" />
@@ -457,10 +469,7 @@
     <Content Include="assets\examples\js\structure\timeline.min.js" />
     <Content Include="assets\examples\js\tables\bootstrap.js" />
     <Content Include="assets\examples\js\tables\bootstrap.min.js" />
-    <Content Include="assets\examples\js\tables\datatable15.js" />
-    <Content Include="assets\examples\js\tables\datatable3.js" />
-    <Content Include="assets\examples\js\tables\datatable4.js" />
-    <Content Include="assets\examples\js\tables\datatable5.js" />
+    <Content Include="assets\examples\js\tables\datatable.js" />
     <Content Include="assets\examples\js\tables\datatable.min.js" />
     <Content Include="assets\examples\js\tables\editable.js" />
     <Content Include="assets\examples\js\tables\editable.min.js" />
@@ -570,6 +579,9 @@
     <Content Include="assets\skins\teal.min.css" />
     <Content Include="assets\skins\yellow.css" />
     <Content Include="assets\skins\yellow.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="global\css\bootstrap-extend.css" />
     <Content Include="global\css\bootstrap-extend.min.css" />
@@ -2047,7 +2059,9 @@
     <Content Include="global\vendor\datatables\datatables.css" />
     <Content Include="global\vendor\datatables\datatables.min.css" />
     <Content Include="global\vendor\datatables\favicon.ico" />
+    <Content Include="global\vendor\datatables\jquery-1.12.4.js" />
     <Content Include="global\vendor\datatables\jquery.dataTables.js" />
+    <Content Include="global\vendor\datatables\jquery.dataTables.min.css" />
     <Content Include="global\vendor\datatables\jquery.dataTables.min.js" />
     <Content Include="global\vendor\datatables\sort_asc.png" />
     <Content Include="global\vendor\datatables\sort_asc_disabled.png" />
@@ -3918,8 +3932,6 @@
     <Content Include="global\vendor\x-editable\images\loading.gif" />
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
-    <Content Include="scripts\bootstrap.js" />
-    <Content Include="scripts\bootstrap.min.js" />
     <Content Include="assets\data\appsMailbox.json" />
     <Content Include="assets\data\bootstrap_table_test.json" />
     <Content Include="assets\data\bootstrap_table_test2.json" />
@@ -4649,9 +4661,13 @@
     <Content Include="global\vendor\summernote\summernote.woff" />
     <Content Include="global\vendor\toastr\toastr.js.map" />
     <Content Include="global\vendor\waves\waves.min.js.map" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\Plantation.pubxml" />
+    <Content Include="scripts\bootstrap.js" />
+    <Content Include="scripts\bootstrap.min.js" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="scripts\datatables.editor\dataTables.editor.min.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
     <None Include="scripts\jquery.validate-vsdoc.js" />
@@ -4659,22 +4675,44 @@
     <Content Include="scripts\jquery.validate.min.js" />
     <Content Include="scripts\jquery.validate.unobtrusive.js" />
     <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="scripts\js\Master\AllowanceDeduction.js" />
     <Content Include="scripts\js\Master\Bank.js" />
+    <Content Include="scripts\js\Master\Country.js" />
+    <Content Include="scripts\js\Master\PurchaseRequestDetails.js" />
+    <Content Include="scripts\js\Master\ControlJob.js" />
+    <Content Include="scripts\js\Master\EmployeeGangDetail.js" />
+    <Content Include="scripts\js\Master\EmployeeGang.js" />
+    <Content Include="scripts\js\Master\BlockUsage.js" />
+    <Content Include="scripts\js\Master\Company.js" />
     <Content Include="scripts\js\Master\CostCenter.js" />
+    <Content Include="scripts\js\Master\BlockOrganization.js" />
+    <Content Include="scripts\js\Master\Employee.js" />
+    <Content Include="scripts\js\Master\FieldMaster.js" />
+    <Content Include="scripts\js\Master\Rainfall.js" />
+    <Content Include="scripts\js\Master\Region.js" />
     <Content Include="scripts\js\Master\Customer.js" />
     <Content Include="scripts\js\Master\CustomerGroup.js" />
     <Content Include="scripts\js\Master\Contractor.js" />
+    <Content Include="scripts\js\Master\MachineMaster.js" />
+    <Content Include="scripts\js\Master\LandConcession.js" />
+    <Content Include="scripts\js\Master\BlockMaster.js" />
+    <Content Include="scripts\js\Master\Stock.js" />
+    <Content Include="scripts\js\Master\PurchaseRequestHeader.js" />
+    <Content Include="scripts\js\Master\VehicleMaster.js" />
+    <Content Include="scripts\js\Master\Workshop.js" />
+    <Content Include="scripts\js\Master\FixedAssetLocation.js" />
     <Content Include="scripts\js\Master\FixedAssetGroup.js" />
     <Content Include="scripts\js\Master\FixedAsset.js" />
+    <Content Include="scripts\js\Master\Station.js" />
+    <Content Include="scripts\js\Master\Transporter.js" />
+    <Content Include="scripts\js\Master\VehicleGroup.js" />
+    <Content Include="scripts\js\Master\WorkshopGroup.js" />
     <Content Include="scripts\js\Master\JobType.js" />
     <Content Include="scripts\js\Master\Supplier.js" />
     <Content Include="scripts\js\Master\ContractorGroup.js" />
     <Content Include="scripts\js\Master\SupplierGroup.js" />
     <Content Include="scripts\js\Master\Store.js" />
-    <Content Include="scripts\js\Master\Stock.js" />
     <Content Include="scripts\js\Master\City.js" />
-    <Content Include="scripts\js\Master\ControlJob.js" />
-    <Content Include="scripts\js\Master\Country.js" />
     <Content Include="scripts\js\Master\Crop.js" />
     <Content Include="scripts\js\Master\CurrencyMaster.js" />
     <Content Include="scripts\js\Master\CurrencyRate.js" />
@@ -4698,10 +4736,104 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AllowanceDeductionController.cs" />
+    <Compile Include="Controllers\PurchaseRequestDetailsController.cs" />
+    <Compile Include="Controllers\PurchaseRequestHeaderController.cs" />
+    <Compile Include="Controllers\ControlJobController.cs" />
+    <Compile Include="Controllers\EmployeeGangDetailController.cs" />
+    <Compile Include="Controllers\EmployeeGangController.cs" />
+    <Compile Include="Controllers\BlockOrganizationController.cs" />
+    <Compile Include="Controllers\CompanySiteController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\FieldMasterController.cs" />
+    <Compile Include="Controllers\RainfallController.cs" />
+    <Compile Include="Controllers\RegionController.cs" />
+    <Compile Include="Controllers\MachineMasterController.cs" />
+    <Compile Include="Controllers\LandConcessionController.cs" />
+    <Compile Include="Controllers\BlockMasterController.cs" />
+    <Compile Include="Controllers\BlockUsageController.cs" />
+    <Compile Include="Controllers\RoleMenuController.cs" />
+    <Compile Include="Controllers\VehicleMasterController.cs" />
+    <Compile Include="Controllers\WorkshopController.cs" />
+    <Compile Include="Controllers\FixedAssetLocationController.cs" />
+    <Compile Include="Controllers\StationController.cs" />
+    <Compile Include="Controllers\TransporterController.cs" />
+    <Compile Include="Controllers\VehicleGroupController.cs" />
+    <Compile Include="Controllers\WorkshopGroupController.cs" />
     <Compile Include="Controllers\JobTypeController.cs" />
+    <Compile Include="Models\DB\AccountingPeriod.cs" />
+    <Compile Include="Models\DB\AllowanceDeduction.cs" />
+    <Compile Include="Models\DB\PurchaseRequestDetails.cs" />
+    <Compile Include="Models\DB\PurchaseRequestHeader.cs" />
+    <Compile Include="Models\DB\ControlJob.cs" />
+    <Compile Include="Models\DB\EmployeeGangDetail.cs" />
+    <Compile Include="Models\DB\EmployeeGang.cs" />
+    <Compile Include="Models\DB\BlockOrganization.cs" />
+    <Compile Include="Models\DB\Employee.cs" />
+    <Compile Include="Models\DB\LandClearing.cs" />
+    <Compile Include="Models\DB\PeriodControl.cs" />
+    <Compile Include="Models\DB\Rainfall.cs" />
+    <Compile Include="Models\DB\Region.cs" />
+    <Compile Include="Models\DB\Station.cs" />
+    <Compile Include="Models\DB\MachineMaster.cs" />
+    <Compile Include="Models\DB\LandConcession.cs" />
+    <Compile Include="Models\DB\BlockMaster.cs" />
+    <Compile Include="Models\DB\BlockUsage.cs" />
+    <Compile Include="Models\DB\FieldMaster.cs" />
+    <Compile Include="Models\DB\VehicleMaster.cs" />
+    <Compile Include="Models\DB\VehicleGroup.cs" />
+    <Compile Include="Models\DB\Workshop.cs" />
+    <Compile Include="Models\DB\WorkshopGroup.cs" />
     <Compile Include="Models\DB\JobType.cs" />
     <Compile Include="Models\JoinTable.cs" />
+    <Compile Include="Repository\AccountingPeriodRepository.cs" />
+    <Compile Include="Repository\AllowanceDeductionRepository.cs" />
+    <Compile Include="Repository\PurchaseRequestDetailsRepository.cs" />
+    <Compile Include="Repository\PurchaseRequestHeaderRepository.cs" />
+    <Compile Include="Repository\ControlJobRepository.cs" />
+    <Compile Include="Repository\EmployeeGangDetailRepository.cs" />
+    <Compile Include="Repository\EmployeeGangRepository.cs" />
+    <Compile Include="Repository\BlockOrganizationRepository.cs" />
+    <Compile Include="Repository\EmployeeRepository.cs" />
+    <Compile Include="Repository\FieldMasterRepository.cs" />
+    <Compile Include="Repository\Interface\IAccountingPeriodRepository.cs" />
+    <Compile Include="Repository\Interface\IAllowanceDeductionRepository.cs" />
+    <Compile Include="Repository\Interface\IPurchaseRequestDetailsRepository.cs" />
+    <Compile Include="Repository\Interface\IPurchaseRequestHeaderRepository.cs" />
+    <Compile Include="Repository\Interface\IBlockMasterRepository.cs" />
+    <Compile Include="Repository\Interface\IControlJobRepository.cs" />
+    <Compile Include="Repository\Interface\IEmployeeGangDetailRepository.cs" />
+    <Compile Include="Repository\Interface\IEmployeeRepository.cs" />
+    <Compile Include="Repository\Interface\IFieldMasterRepository.cs" />
+    <Compile Include="Repository\Interface\ILandClearingRepository.cs" />
+    <Compile Include="Repository\Interface\IPeriodControlRepository.cs" />
+    <Compile Include="Repository\Interface\IRainfallRepository.cs" />
+    <Compile Include="Repository\Interface\IRegionRepository.cs" />
+    <Compile Include="Repository\PeriodControlRepository.cs" />
+    <Compile Include="Repository\RainfallRepository.cs" />
+    <Compile Include="Repository\RegionRepository.cs" />
+    <Compile Include="Repository\FixedAssetLocationRepository.cs" />
+    <Compile Include="Repository\Interface\IBlockOrganizationRepository.cs" />
+    <Compile Include="Repository\Interface\IEmployeeGangRepository.cs" />
+    <Compile Include="Repository\Interface\IFixedAssetLocationRepository.cs" />
+    <Compile Include="Repository\Interface\IStationRepository.cs" />
+    <Compile Include="Repository\Interface\IMachineMasterRepository.cs" />
+    <Compile Include="Repository\Interface\ILandConcessionRepository.cs" />
+    <Compile Include="Repository\Interface\IBlockUsageRepository.cs" />
+    <Compile Include="Repository\Interface\IVehicleMasterRepository.cs" />
+    <Compile Include="Repository\Interface\IVehicleGroupRepository.cs" />
+    <Compile Include="Repository\Interface\IWorkshopRepository.cs" />
+    <Compile Include="Repository\Interface\IWorkshopGroupRepository.cs" />
     <Compile Include="Repository\Interface\IJobTypeRepository.cs" />
+    <Compile Include="Repository\StationRepository.cs" />
+    <Compile Include="Repository\MachineMasterRepository.cs" />
+    <Compile Include="Repository\LandConcessionRepository.cs" />
+    <Compile Include="Repository\BlockMasterRepository.cs" />
+    <Compile Include="Repository\BlockUsageRepository.cs" />
+    <Compile Include="Repository\VehicleMasterRepository.cs" />
+    <Compile Include="Repository\VehicleGroupRepository.cs" />
+    <Compile Include="Repository\WorkshopRepository.cs" />
+    <Compile Include="Repository\WorkshopGroupRepository.cs" />
     <Compile Include="Repository\JobTypeRepository.cs" />
     <Compile Include="Resources\Language.Designer.cs">
       <DependentUpon>Language.resx</DependentUpon>
@@ -4725,7 +4857,6 @@
     <Compile Include="Controllers\CostCenterController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\CustomerGroupController.cs" />
-    <Compile Include="Controllers\ControlJobController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CropController.cs" />
     <Compile Include="Controllers\CurrencyMasterController.cs" />
@@ -4764,7 +4895,6 @@
     <Compile Include="Models\DB\Contractor.cs" />
     <Compile Include="Models\DB\ContractorGroup.cs" />
     <Compile Include="Models\DB\CostCenter.cs" />
-    <Compile Include="Models\DB\ControlJob.cs" />
     <Compile Include="Models\DB\Country.cs" />
     <Compile Include="Models\DB\Crop.cs" />
     <Compile Include="Models\DB\CurrencyMaster.cs" />
@@ -4812,7 +4942,6 @@
     <Compile Include="Repository\ContractorGroupRepository.cs" />
     <Compile Include="Repository\ContractorRepository.cs" />
     <Compile Include="Repository\CostCenterRepository.cs" />
-    <Compile Include="Repository\ControlJobRepository.cs" />
     <Compile Include="Repository\CountryRepository.cs" />
     <Compile Include="Repository\CropRepository.cs" />
     <Compile Include="Repository\CurrencyMasterRepository.cs" />
@@ -4830,7 +4959,6 @@
     <Compile Include="Repository\Interface\ICompanySiteRepository.cs" />
     <Compile Include="Repository\Interface\IContractorGroupRepository.cs" />
     <Compile Include="Repository\Interface\IContractorRepository.cs" />
-    <Compile Include="Repository\Interface\IControlJobRepository.cs" />
     <Compile Include="Repository\Interface\ICountryRepository.cs" />
     <Compile Include="Repository\Interface\ICropRepository.cs" />
     <Compile Include="Repository\Interface\ICurrencyMasterRepository.cs" />
@@ -4905,24 +5033,16 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\MainLayout.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\Shared\Sidebar.cshtml" />
     <Content Include="Views\City\Index.cshtml" />
     <Content Include="Views\Province\Index.cshtml" />
-    <Content Include="Views\Country\Index.cshtml" />
     <Content Include="Views\Company\Index.cshtml" />
     <Content Include="Views\UnitOfMeasure\Index.cshtml" />
     <Content Include="Views\Crop\Index.cshtml" />
     <Content Include="Views\Position\Index.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
-    <Content Include="Views\ControlJob\Index.cshtml" />
     <Content Include="Views\JobGroup\Index.cshtml" />
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="Views\Department\Index.cshtml" />
@@ -4949,6 +5069,62 @@
     <Content Include="Views\CostCenter\Index.cshtml" />
     <Content Include="Views\JobType\Index.cshtml" />
     <Content Include="Views\LoadType\Index.cshtml" />
+    <Content Include="Views\Shared\MainLayout.cshtml" />
+    <Content Include="scripts\jquery-1.10.2.min.map" />
+    <Content Include="tsconfig.json" />
+    <Content Include="Views\WorkshopGroup\Index.cshtml" />
+    <Content Include="Views\VehicleGroup\Index.cshtml" />
+    <Content Include="Views\Station\Index.cshtml" />
+    <Content Include="Views\Supplier\Create.cshtml" />
+    <Content Include="Views\Supplier\Edit.cshtml" />
+    <Content Include="Views\Contractor\Edit.cshtml" />
+    <Content Include="Views\Contractor\Create.cshtml" />
+    <Content Include="Views\Customer\Create.cshtml" />
+    <Content Include="Views\Customer\Edit.cshtml" />
+    <Content Include="Views\Transporter\Create.cshtml" />
+    <Content Include="Views\Transporter\Edit.cshtml" />
+    <Content Include="Views\Transporter\Index.cshtml" />
+    <Content Include="Views\FixedAssetLocation\Index.cshtml" />
+    <Content Include="Views\Workshop\Index.cshtml" />
+    <Content Include="Views\BlockOrganization\Index.cshtml" />
+    <Content Include="Views\Bank\Edit.cshtml" />
+    <Content Include="Views\Bank\Create.cshtml" />
+    <Content Include="Views\VehicleMaster\Create.cshtml" />
+    <Content Include="Views\VehicleMaster\Edit.cshtml" />
+    <Content Include="Views\VehicleMaster\Index.cshtml" />
+    <Content Include="Views\MachineMaster\Create.cshtml" />
+    <Content Include="Views\MachineMaster\Edit.cshtml" />
+    <Content Include="Views\MachineMaster\Index.cshtml" />
+    <Content Include="Views\LandConcession\Create.cshtml" />
+    <Content Include="Views\LandConcession\Edit.cshtml" />
+    <Content Include="Views\LandConcession\Index.cshtml" />
+    <Content Include="Views\BlockMaster\Create.cshtml" />
+    <Content Include="Views\BlockMaster\Edit.cshtml" />
+    <Content Include="Views\BlockMaster\Index.cshtml" />
+    <Content Include="Views\Region\Index.cshtml" />
+    <Content Include="Views\Company\Edit.cshtml" />
+    <Content Include="Views\CompanySite\Create.cshtml" />
+    <Content Include="Views\CompanySite\Edit.cshtml" />
+    <Content Include="Views\Employee\Create.cshtml" />
+    <Content Include="Views\Employee\Edit.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\FieldMaster\Create.cshtml" />
+    <Content Include="Views\FieldMaster\Edit.cshtml" />
+    <Content Include="Views\FieldMaster\Index.cshtml" />
+    <Content Include="Views\EmployeeGang\Create.cshtml" />
+    <Content Include="Views\EmployeeGang\Edit.cshtml" />
+    <Content Include="Views\EmployeeGang\Index.cshtml" />
+    <Content Include="Views\AllowanceDeduction\Index.cshtml" />
+    <Content Include="Views\Rainfall\Create.cshtml" />
+    <Content Include="Views\Rainfall\Edit.cshtml" />
+    <Content Include="Views\Rainfall\Index.cshtml" />
+    <Content Include="Views\Stock\Edit.cshtml" />
+    <Content Include="Views\Stock\Create.cshtml" />
+    <Content Include="Views\ControlJob\Index.cshtml" />
+    <Content Include="Views\PurchaseRequestHeader\Create.cshtml" />
+    <Content Include="Views\PurchaseRequestHeader\Edit.cshtml" />
+    <Content Include="Views\PurchaseRequestHeader\Index.cshtml" />
+    <Content Include="Views\Country\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -4958,6 +5134,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\BlockUsage\" />
+    <Folder Include="Views\PurchaseRequestDetails\" />
+    <Folder Include="Views\RoleMenu\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Language.resx">
@@ -4973,11 +5152,15 @@
       <LastGenOutput>Language.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>

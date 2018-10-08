@@ -1,17 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Plantation.Repository;
-using Plantation.Repository.Interface;
+﻿using DataTables;
+using Plantation.Models;
 using Plantation.Models.DB;
-
+using Plantation.Repository;
+using Plantation.Utility;
+using System;
+using System.Web.Mvc;
 namespace Plantation.Controllers
 {
     public class PositionController : Controller
     {
         private PositionRepository IPS = new PositionRepository();
+
+        // GET: Data For Editor Datatables
+        public JsonResult Data()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+
+            using (var db = new Database("sqlserver", Constant.DatabaseConnection))
+            {
+                var response = new Editor(db, "POSITION", "SID")
+                    .Model<Position>()
+                    .Field(new Field("IDPOSITION")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("POSITIONNAME")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("DESCRIPTION")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("STATUS"))
+                    .Field(new Field("UPDATEBY").SetValue(Session["userid"].ToString()))
+                    .Field(new Field("UPDATEDATE").SetValue(DateTime.Now))
+                    .Process(request)
+                    .Data();
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: Position
         public ActionResult Index()
         {
@@ -29,28 +56,41 @@ namespace Plantation.Controllers
 
             return View(IPS.Find(id));
         }
-
-        //
-        // GET: /Position/Create
-        public ActionResult Create(Position position, string userid)
+        
+        [HttpPost]
+        public JsonResult Create(Position position, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                IPS.Add(position, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    IPS.Add(position, Session["userid"].ToString());
+                }
+            }
+            catch
+            {
+                return Json("error");
             }
 
-            return View(position);
+            return Json("success");
         }
 
-        // POST: /Position/Edit/5
         [HttpPost]
-        public ActionResult Edit(Position position, string userid)
+        public JsonResult Edit(Position position, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                IPS.Update(position, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    IPS.Update(position, Session["userid"].ToString());
+                }
             }
-            return View(position);
+            catch
+            {
+                return Json("error");
+            }
+
+            return Json("success");
         }
 
         //

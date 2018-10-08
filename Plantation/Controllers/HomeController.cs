@@ -36,6 +36,7 @@ namespace Plantation.Controllers
                     {
                         Session["username"] = data.USERNAME;
                         Session["userid"] = data.SID;
+                        Session["companysite"] = data.COMPANYSITE;
                         return RedirectToAction("Dashboard");
                     }
                     else

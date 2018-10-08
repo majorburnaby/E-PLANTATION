@@ -1,19 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Plantation.Repository;
-using Plantation.Repository.Interface;
+﻿using DataTables;
+using Plantation.Models;
 using Plantation.Models.DB;
+using Plantation.Repository;
+using Plantation.Utility;
+using System;
+using System.Web.Mvc;
 
 namespace Plantation.Controllers
 {
     public class ControlJobController : Controller
     {
         private ControlJobRepository ICJ = new ControlJobRepository();
-        // GET: ControlJob
+        ComboBoxContext context = new ComboBoxContext();
 
+        // GET: Data For Editor Datatables
+        public JsonResult Data()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+
+            using (var db = new Database("sqlserver", Constant.DatabaseConnection))
+            {
+                var response = new Editor(db, "CONTROLJOB", "CONTROLJOB.SID")
+                    .Model<JoinModelControlJob>("CONTROLJOB")
+                    .Model<JoinModelJob>("JOB")
+                    .Field(new Field("CONTROLJOB.ITEMCODE")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("CONTROLJOB.ITEMDESCRIPTION")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("CONTROLJOB.CONTROLSYSTEM")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("CONTROLJOB.ISACTIVE"))
+                    .Field(new Field("CONTROLJOB.UPDATEBY").SetValue(Session["userid"].ToString()))
+                    .Field(new Field("CONTROLJOB.UPDATEDATE").SetValue(DateTime.Now))
+                    .Field(new Field("CONTROLJOB.JOB")
+                        .Options(new Options()
+                            .Table("JOB")
+                            .Value("SID")
+                            .Label("JOBNAME")
+                        )
+                        .Validator(Validation.DbValues(new ValidationOpts { Empty = false }))
+                    )
+                    .LeftJoin("JOB", "JOB.SID", "=", "CONTROLJOB.JOB")
+                    .Process(request)
+                    .Data();
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        //
+        // GET: /ControlJob/
         public ActionResult Index()
         {
             if (Session["username"] == null)
@@ -23,6 +62,12 @@ namespace Plantation.Controllers
             return View(ICJ.GetAll());
         }
 
+        public JsonResult GetJobList()
+        {
+            var users = context.GetJob();
+            return Json(users, JsonRequestBehavior.AllowGet);
+        }
+        
         //
         // GET: /ControlJob/Details/5
         public ActionResult Details(int? id)
@@ -30,28 +75,41 @@ namespace Plantation.Controllers
 
             return View(ICJ.Find(id));
         }
-
-        //
-        // GET: /ControlJob/Create
-        public ActionResult Create(ControlJob controljob)
-        {
-            if (ModelState.IsValid)
-            {
-                ICJ.Add(controljob, Session["userid"].ToString());
-            }
-
-            return View(controljob);
-        }
-
-        // POST: /ControlJob/Edit/5
+        
         [HttpPost]
-        public ActionResult Edit(ControlJob controljob)
+        public JsonResult Create(ControlJob controljob, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                ICJ.Update(controljob, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    ICJ.Add(controljob, Session["userid"].ToString());
+                }
             }
-            return View(controljob);
+            catch
+            {
+                return Json("error");
+            }
+
+            return Json("success");
+        }
+        
+        [HttpPost]
+        public JsonResult Edit(ControlJob controljob, string userid)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    ICJ.Update(controljob, Session["userid"].ToString());
+                }
+            }
+            catch
+            {
+                return Json("error");
+            }
+
+            return Json("success");
         }
 
         //

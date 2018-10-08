@@ -1,24 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Plantation.Repository;
-using Plantation.Repository.Interface;
+﻿using DataTables;
+using Plantation.Models;
 using Plantation.Models.DB;
-
+using Plantation.Repository;
+using Plantation.Utility;
+using System;
+using System.Web.Mvc;
 namespace Plantation.Controllers
 {
     public class UnitOfMeasureController : Controller
     {
         private UnitOfMeasureRepository UOM = new UnitOfMeasureRepository();
+
+        public JsonResult GetRole()
+        {
+            return Json(UOM.GetRole(int.Parse(Session["IDMENU"].ToString()), Session["userid"].ToString()), JsonRequestBehavior.AllowGet);
+        }
+
+        // GET: Data For Editor Datatables
+        public JsonResult Data()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+
+            using (var db = new Database("sqlserver", Constant.DatabaseConnection))
+            {
+                var response = new Editor(db, "UNITOFMEASURE", "SID")
+                    .Model<UnitOfMeasure>()
+                    .Field(new Field("IDUOM")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("UOMNAME")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("ISACTIVE"))
+                    .Field(new Field("UPDATEBY").SetValue(Session["userid"].ToString()))
+                    .Field(new Field("UPDATEDATE").SetValue(DateTime.Now))
+                    .Process(request)
+                    .Data();
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: UnitOfMeasure
-        public ActionResult Index()
+        public ActionResult Index(int IDMENU)
         {
             if (Session["username"] == null)
             {
                 return RedirectToAction("Login", "Home");
             }
+            Session["IDMENU"] = IDMENU;
             return View(UOM.GetAll());
         }
 
@@ -29,28 +59,41 @@ namespace Plantation.Controllers
 
             return View(UOM.Find(id));
         }
-
-        //
-        // POST: /UnitOfMeasure/Create
-        [HttpPost]
-        public ActionResult Create(UnitOfMeasure unitofmeasure, string userid)
-        {
-            if (ModelState.IsValid)
-            {
-                UOM.Add(unitofmeasure, Session["userid"].ToString());
-            }
-            return View(unitofmeasure);
-        }
         
-        // POST: /UnitOfMeasure/Edit/5
         [HttpPost]
-        public ActionResult Edit(UnitOfMeasure unitofmeasure, string userid)
+        public JsonResult Create(UnitOfMeasure unitofmeasure, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                UOM.Update(unitofmeasure, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    UOM.Add(unitofmeasure, Session["userid"].ToString());
+                }
             }
-            return View(unitofmeasure);
+            catch
+            {
+                return Json("error");
+            }
+
+            return Json("success");
+        }
+
+        [HttpPost]
+        public JsonResult Edit(UnitOfMeasure unitofmeasure, string userid)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    UOM.Update(unitofmeasure, Session["userid"].ToString());
+                }
+            }
+            catch
+            {
+                return Json("error");
+            }
+
+            return Json("success");
         }
 
         //
@@ -62,7 +105,7 @@ namespace Plantation.Controllers
         }
 
         //
-        // POST: /UnitOfMeasure/Delete/5
+        // POST: /Position/Delete/5
 
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)

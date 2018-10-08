@@ -68,17 +68,7 @@ namespace Plantation.Controllers
 
             return View(IPV.Find(id));
         }
-
-        //
-        // GET: /Province/Create
-        //public ActionResult Create(Province province, string userid)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        IPV.Add(province, Session["userid"].ToString());
-        //    }
-        //    return View(province);
-        //}
+        
         [HttpPost]
         public JsonResult Create(Province province, string userid)
         {
@@ -96,19 +86,7 @@ namespace Plantation.Controllers
 
             return Json("success");
         }
-
-        //
-        // GET: /Province/Edit/5
-        // POST: /Country/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(Province province, string userid)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        IPV.Update(province, Session["userid"].ToString());
-        //    }
-        //    return View(province);
-        //}
+        
         [HttpPost]
         public JsonResult Edit(Province province, string userid)
         {

@@ -1,19 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using Plantation.Models.DB;
 using Plantation.Repository;
-using Plantation.Repository.Interface;
-using Plantation.Models.DB;
-using Plantation.Models;
+using System.Web.Mvc;
+using DataTables;
+using Plantation.Utility;
+using System;
 
 namespace Plantation.Controllers
 {
     public class TransporterGroupController : Controller
     {
         private TransporterGroupRepository ITG = new TransporterGroupRepository();
-        ComboBoxContext context = new ComboBoxContext();
+
+        public JsonResult Data()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+
+            using (var db = new Database("sqlserver", Constant.DatabaseConnection))
+            {
+                var response = new Editor(db, "TRANSPORTERGROUP", "SID")
+                    .Model<TransporterGroup>()
+                    .Field(new Field("IDTRANSPORTERGROUP")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("TRANSPORTERGROUPNAME")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("UPDATEBY").SetValue(Session["userid"].ToString()))
+                    .Field(new Field("UPDATEDATE").SetValue(DateTime.Now))
+                    .Process(request)
+                    .Data();
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: TransporterGroup
         public ActionResult Index()
         {
@@ -24,12 +44,6 @@ namespace Plantation.Controllers
             return View(ITG.GetAll());
         }
 
-        public JsonResult GetControlJobList()
-        {
-            var users = context.GetControlJob();
-            return Json(users, JsonRequestBehavior.AllowGet);
-        }
-
         //
         // GET: /TransporterGroup/Details/5
         public ActionResult Details(int? id)
@@ -38,27 +52,40 @@ namespace Plantation.Controllers
             return View(ITG.Find(id));
         }
 
-        //
-        // GET: /TransporterGroup/Create
-        public ActionResult Create(TransporterGroup transportergroup, string userid)
+        [HttpPost]
+        public JsonResult Create(TransporterGroup transportergroup, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                ITG.Add(transportergroup, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    ITG.Add(transportergroup, Session["userid"].ToString());
+                }
+            }
+            catch
+            {
+                return Json("error");
             }
 
-            return View(transportergroup);
+            return Json("success");
         }
 
-        // POST: /TransporterGroup/Edit/5
         [HttpPost]
-        public ActionResult Edit(TransporterGroup transportergroup, string userid)
+        public JsonResult Edit(TransporterGroup transportergroup, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                ITG.Update(transportergroup, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    ITG.Update(transportergroup, Session["userid"].ToString());
+                }
             }
-            return View(transportergroup);
+            catch
+            {
+                return Json("error");
+            }
+
+            return Json("success");
         }
 
         //

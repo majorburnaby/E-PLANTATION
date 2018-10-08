@@ -12,20 +12,7 @@ namespace Plantation.Controllers
     {
         private CityRepository ICR = new CityRepository();
         ComboBoxContext context = new ComboBoxContext();
-
-        //public ActionResult LoadData()
-        //{
-        //    var draw = Request.Form.GetValues("draw").FirstOrDefault();
-        //    var start = Request.Form.GetValues("start").FirstOrDefault();
-        //    var length = Request.Form.GetValues("length").FirstOrDefault();
-
-        //    int pageSize = length != null ? Convert.ToInt32(length) : 0;
-        //    int skip = start != null ? Convert.ToInt32(start) : 0;
-        //    int totalRecords = 0;
-
-        //    var v = ICR.GetAll();
-
-        //}
+               
 
         // GET: Data For Editor Datatables
         public JsonResult Data()
@@ -106,19 +93,7 @@ namespace Plantation.Controllers
         {
             return View(ICR.Find(id));
         }
-
-        //
-        // POST: /City/Create
-        //[HttpPost]
-        //public ActionResult Create(City city)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        ICR.Add(city, Session["userid"].ToString());
-        //    }
-
-        //    return View(city);
-        //}
+        
         [HttpPost]
         public JsonResult Create(City city, string userid)
         {
@@ -136,18 +111,7 @@ namespace Plantation.Controllers
 
             return Json("success");
         }
-
-        //
-        // POST: /City/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(City city)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        ICR.Update(city, Session["userid"].ToString());
-        //    }
-        //    return View(city);
-        //}
+        
         [HttpPost]
         public JsonResult Edit(City city, string userid)
         {

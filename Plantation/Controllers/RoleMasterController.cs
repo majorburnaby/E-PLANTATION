@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using Plantation.Models.DB;
 using Plantation.Repository;
-using Plantation.Repository.Interface;
+using System.Web.Mvc;
+using DataTables;
+using Plantation.Utility;
+using System;
 using Plantation.Models;
-using Plantation.Models.DB;
 
 namespace Plantation.Controllers
 {
@@ -14,6 +12,25 @@ namespace Plantation.Controllers
     {
         private RoleMasterRepository IRM = new RoleMasterRepository();
         ComboBoxContext context = new ComboBoxContext();
+
+        public JsonResult Data()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+
+            using (var db = new Database("sqlserver", Constant.DatabaseConnection))
+            {
+                var response = new Editor(db, "ROLEMASTER", "SID")
+                    .Model<RoleMaster>()
+                    .Field(new Field("IDROLE"))
+                    .Field(new Field("ROLENAME"))
+                    .Field(new Field("ISACTIVE"))
+                    .Process(request)
+                    .Data();
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: RoleMaster
         public ActionResult Index()
         {
@@ -47,11 +64,24 @@ namespace Plantation.Controllers
         [HttpPost]
         public ActionResult Edit(RoleMaster rolemaster, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                IRM.Update(rolemaster, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    IRM.Update(rolemaster, Session["userid"].ToString());
+                }
+                return RedirectToAction("Index");
             }
-            return View(rolemaster);
+            catch
+            {
+                return View();
+            }
+
+            //if (ModelState.IsValid)
+            //{
+            //    IRM.Update(rolemaster, Session["userid"].ToString());
+            //}
+            //return View(rolemaster);
         }
 
         //

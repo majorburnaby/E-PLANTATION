@@ -1,19 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using Plantation.Models.DB;
 using Plantation.Repository;
-using Plantation.Repository.Interface;
-using Plantation.Models.DB;
-using Plantation.Models;
+using System.Web.Mvc;
+using DataTables;
+using Plantation.Utility;
+using System;
 
 namespace Plantation.Controllers
 {
     public class ContractorGroupController : Controller
     {
         private ContractorGroupRepository CTG = new ContractorGroupRepository();
-        ComboBoxContext context = new ComboBoxContext();
+
+        public JsonResult Data()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+
+            using (var db = new Database("sqlserver", Constant.DatabaseConnection))
+            {
+                var response = new Editor(db, "CONTRACTORGROUP", "SID")
+                    .Model<ContractorGroup>()
+                    .Field(new Field("IDCONTRACTORGROUP")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("CONTRACTORGROUPNAME")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("UPDATEBY").SetValue(Session["userid"].ToString()))
+                    .Field(new Field("UPDATEDATE").SetValue(DateTime.Now))
+                    .Process(request)
+                    .Data();
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: ContractorGroup
         public ActionResult Index()
         {
@@ -24,12 +44,6 @@ namespace Plantation.Controllers
             return View(CTG.GetAll());
         }
 
-        public JsonResult GetControlJobList()
-        {
-            var users = context.GetControlJob();
-            return Json(users, JsonRequestBehavior.AllowGet);
-        }
-
         //
         // GET: /ContractorGroup/Details/5
         public ActionResult Details(int? id)
@@ -38,31 +52,45 @@ namespace Plantation.Controllers
             return View(CTG.Find(id));
         }
 
-        //
-        // GET: /ContractorGroup/Create
-        public ActionResult Create(ContractorGroup Contractorgroup, string userid)
+        [HttpPost]
+        public JsonResult Create(ContractorGroup contractorgroup, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                CTG.Add(Contractorgroup, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    CTG.Add(contractorgroup, Session["userid"].ToString());
+                }
+            }
+            catch
+            {
+                return Json("error");
             }
 
-            return View(Contractorgroup);
+            return Json("success");
         }
 
-        //
-        // GET: /ContractorGroup/Edit/5
-        public ActionResult Edit(ContractorGroup Contractorgroup, string userid)
+        [HttpPost]
+        public JsonResult Edit(ContractorGroup contractorgroup, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                CTG.Update(Contractorgroup, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    CTG.Update(contractorgroup, Session["userid"].ToString());
+                }
             }
-            return View(Contractorgroup);
+            catch
+            {
+                return Json("error");
+            }
+
+            return Json("success");
         }
 
         //
         // GET: /ContractorGroup/Delete/5
+
         public ActionResult Delete(int id)
         {
             return View(CTG.Find(id));
@@ -70,6 +98,7 @@ namespace Plantation.Controllers
 
         //
         // POST: /ContractorGroup/Delete/5
+
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {

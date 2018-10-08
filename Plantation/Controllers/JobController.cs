@@ -30,6 +30,9 @@ namespace Plantation.Controllers
                     .Field(new Field("JOB.JOBNAME")
                         .Validator(Validation.NotEmpty())
                     )
+                    .Field(new Field("JOB.ACCOUNT")
+                        .Validator(Validation.NotEmpty())
+                    )
                     .Field(new Field("JOB.UPDATEBY").SetValue(Session["userid"].ToString()))
                     .Field(new Field("JOB.UPDATEDATE").SetValue(DateTime.Now))
                     .Field(new Field("JOB.JOBGROUP")
@@ -50,6 +53,7 @@ namespace Plantation.Controllers
                     )
                     .LeftJoin("JOBGROUP", "JOBGROUP.SID", "=", "JOB.JOBGROUP")
                     .LeftJoin("JOBTYPE", "JOBTYPE.SID", "=", "JOB.JOBTYPE")
+                    .Where ("JOB.COMPANYSITE", int.Parse(Session["companysite"].ToString()))
                     .Process(request)
                     .Data();
 
@@ -87,18 +91,6 @@ namespace Plantation.Controllers
             return View(IJO.Find(id));
         }
 
-        //
-        // POST: /Job/Create
-        //[HttpPost]
-        //public ActionResult Create(Job job, string userid)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        IJO.Add(job, Session["userid"].ToString());
-        //    }
-
-        //    return View(job);
-        //}
         [HttpPost]
         public JsonResult Create(Job job, string userid)
         {
@@ -106,6 +98,7 @@ namespace Plantation.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    job.COMPANYSITE = int.Parse(Session["companysite"].ToString());
                     IJO.Add(job, Session["userid"].ToString());
                 }
             }
@@ -116,18 +109,7 @@ namespace Plantation.Controllers
 
             return Json("success");
         }
-
-        //
-        // POST: /Job/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(Job job, string userid)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        IJO.Update(job, Session["userid"].ToString());
-        //    }
-        //    return View(job);
-        //}
+        
         [HttpPost]
         public JsonResult Edit(Job job, string userid)
         {
@@ -135,6 +117,7 @@ namespace Plantation.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    job.COMPANYSITE = int.Parse(Session["companysite"].ToString());
                     IJO.Update(job, Session["userid"].ToString());
                 }
             }

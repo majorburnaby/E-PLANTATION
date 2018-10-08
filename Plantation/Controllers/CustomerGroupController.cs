@@ -1,19 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using Plantation.Models.DB;
 using Plantation.Repository;
-using Plantation.Repository.Interface;
-using Plantation.Models.DB;
-using Plantation.Models;
+using System.Web.Mvc;
+using DataTables;
+using Plantation.Utility;
+using System;
 
 namespace Plantation.Controllers
 {
     public class CustomerGroupController : Controller
     {
         private CustomerGroupRepository CSG = new CustomerGroupRepository();
-        ComboBoxContext context = new ComboBoxContext();
+
+        public JsonResult Data()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+
+            using (var db = new Database("sqlserver", Constant.DatabaseConnection))
+            {
+                var response = new Editor(db, "CUSTOMERGROUP", "SID")
+                    .Model<CustomerGroup>()
+                    .Field(new Field("IDCUSTOMERGROUP")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("CUSTOMERGROUPNAME")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("UPDATEBY").SetValue(Session["userid"].ToString()))
+                    .Field(new Field("UPDATEDATE").SetValue(DateTime.Now))
+                    .Process(request)
+                    .Data();
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: CustomerGroup
         public ActionResult Index()
         {
@@ -24,12 +44,6 @@ namespace Plantation.Controllers
             return View(CSG.GetAll());
         }
 
-        public JsonResult GetControlJobList()
-        {
-            var users = context.GetControlJob();
-            return Json(users, JsonRequestBehavior.AllowGet);
-        }
-
         //
         // GET: /CustomerGroup/Details/5
         public ActionResult Details(int? id)
@@ -38,31 +52,45 @@ namespace Plantation.Controllers
             return View(CSG.Find(id));
         }
 
-        //
-        // GET: /CustomerGroup/Create
-        public ActionResult Create(CustomerGroup Customergroup, string userid)
+        [HttpPost]
+        public JsonResult Create(CustomerGroup customergroup, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                CSG.Add(Customergroup, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    CSG.Add(customergroup, Session["userid"].ToString());
+                }
+            }
+            catch
+            {
+                return Json("error");
             }
 
-            return View(Customergroup);
+            return Json("success");
         }
 
-        //
-        // GET: /CustomerGroup/Edit/5
-        public ActionResult Edit(CustomerGroup Customergroup, string userid)
+        [HttpPost]
+        public JsonResult Edit(CustomerGroup customergroup, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                CSG.Update(Customergroup, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    CSG.Update(customergroup, Session["userid"].ToString());
+                }
             }
-            return View(Customergroup);
+            catch
+            {
+                return Json("error");
+            }
+
+            return Json("success");
         }
 
         //
         // GET: /CustomerGroup/Delete/5
+
         public ActionResult Delete(int id)
         {
             return View(CSG.Find(id));
@@ -70,6 +98,7 @@ namespace Plantation.Controllers
 
         //
         // POST: /CustomerGroup/Delete/5
+
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {

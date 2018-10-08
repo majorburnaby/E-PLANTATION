@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Plantation.Repository;
-using Plantation.Repository.Interface;
-using Plantation.Models.DB;
+﻿using DataTables;
 using Plantation.Models;
+using Plantation.Models.DB;
+using Plantation.Repository;
+using Plantation.Utility;
+using System;
+using System.Web.Mvc;
 
 namespace Plantation.Controllers
 {
@@ -14,6 +12,41 @@ namespace Plantation.Controllers
     {
         private StockGroupRepository STG = new StockGroupRepository();
         ComboBoxContext context = new ComboBoxContext();
+
+        // GET: Data For Editor Datatables
+        public JsonResult Data()
+        {
+            var request = System.Web.HttpContext.Current.Request;
+
+            using (var db = new Database("sqlserver", Constant.DatabaseConnection))
+            {
+                var response = new Editor(db, "STOCKGROUP", "STOCKGROUP.SID")
+                    .Model<JoinModelStockGroup>("STOCKGROUP")
+                    .Model<JoinModelControlJob>("CONTROLJOB")
+                    .Field(new Field("STOCKGROUP.IDSTOCKGROUP")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("STOCKGROUP.STOCKGROUPNAME")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("STOCKGROUP.UPDATEBY").SetValue(Session["userid"].ToString()))
+                    .Field(new Field("STOCKGROUP.UPDATEDATE").SetValue(DateTime.Now))
+                    .Field(new Field("STOCKGROUP.CONTROLJOB")
+                        .Options(new Options()
+                            .Table("CONTROLJOB")
+                            .Value("SID")
+                            .Label("ITEMDESCRIPTION")
+                        )
+                        .Validator(Validation.DbValues(new ValidationOpts { Empty = false }))
+                    )
+                    .LeftJoin("CONTROLJOB", "CONTROLJOB.SID", "=", "STOCKGROUP.CONTROLJOB")
+                    .Process(request)
+                    .Data();
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: StockGroup
         public ActionResult Index()
         {
@@ -24,48 +57,52 @@ namespace Plantation.Controllers
             return View(STG.GetAll());
         }
 
-        public JsonResult GetControlJobList()
+        public JsonResult GetControlJob()
         {
             var users = context.GetControlJob();
             return Json(users, JsonRequestBehavior.AllowGet);
         }
 
-        //
-        // GET: /StockGroup/Details/5
         public ActionResult Details(int? id)
         {
 
             return View(STG.Find(id));
         }
 
-        //
-        // GET: /StockGroup/Create
-        public ActionResult Create(StockGroup stockgroup, string userid)
+        [HttpPost]
+        public JsonResult Create(StockGroup stockgroup, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                STG.Add(stockgroup, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    STG.Add(stockgroup, Session["userid"].ToString());
+                }
+            }
+            catch
+            {
+                return Json("error");
             }
 
-            return View(stockgroup);
+            return Json("success");
         }
 
-        //
-        // GET: /StockGroup/Edit/5
-        public ActionResult Edit(StockGroup stockgroup, string userid)
+        [HttpPost]
+        public JsonResult Edit(StockGroup stockgroup, string userid)
         {
-            if (ModelState.IsValid)
+            try
             {
-                STG.Update(stockgroup, Session["userid"].ToString());
+                if (ModelState.IsValid)
+                {
+                    STG.Update(stockgroup, Session["userid"].ToString());
+                }
             }
-            return View(stockgroup);
-        }
+            catch
+            {
+                return Json("error");
+            }
 
-        //
-        // GET: /StockGroup/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View(STG.Find(id));
+            return Json("success");
         }
 
         //
