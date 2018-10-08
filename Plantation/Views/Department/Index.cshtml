@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewBag.Title = "Department";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+@section Head{
+    <!-- Plugins -->
+    <link rel="stylesheet" href="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.css">
+    <link rel="stylesheet" href="~/global/vendor/datatables-responsive/dataTables.responsive.css">
+    <style>
+        .center {
+            text-align: center;
+        }
+    </style>
+}
+
+<div class="page">
+    <div class="page-content">
+        <div class="panel panel-bordered">
+            <div class="panel-heading">
+                <h3 class="panel-title">DEPARTMENT</h3>
+                <div class="panel-actions">
+                    <a class="panel-action icon md-refresh-alt" data-toggle="panel-refresh"
+                       data-load-callback="customRefreshCallback" aria-hidden="true"></a>
+                    <a class="panel-action icon md-minus" aria-expanded="true" data-toggle="panel-collapse"
+                       aria-hidden="true"></a>
+                    <a class="panel-action icon md-fullscreen" data-toggle="panel-fullscreen" aria-hidden="true"></a>
+                    <a class="panel-action icon md-close" data-toggle="panel-close" aria-hidden="true"></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div style="overflow-x: scroll;">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                            <div class="m-b-15">
+                                <button id="addToTable" class="btn btn-primary" type="button">
+                                    <i class="icon md-plus" aria-hidden="true"></i> Add Row
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-hover table-striped" cellspacing="0" id="tbldepartment" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th style="display:none">#</th>
+                                <th style="text-align:center;">CODE</th>
+                                <th style="text-align:center;">NAME</th>
+                                <th style="text-align:center;">DESCRIPTION</th>
+                                <th style="text-align:center;">ACTION</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Panel Table Add Ro -->
+@section Footer1{
+    <!-- Plugins -->
+    <script src="~/global/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
+    <script src="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
+    <script src="~/global/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="~/global/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
+    <script src="~/global/vendor/asrange/jquery-asRange.min.js"></script>
+    <script src="~/global/vendor/bootbox/bootbox.js"></script>
+    <script>
+        (function (factory) {
+            if (typeof define === 'function' && define.amd) {
+                // AMD
+                define(['jquery', 'datatables', 'datatables-editor'], factory);
+            }
+            else if (typeof exports === 'object') {
+                // Node / CommonJS
+                module.exports = function ($, dt) {
+                    if (!$) { $ = require('jquery'); }
+                    factory($, dt || $.fn.dataTable || require('datatables'));
+                };
+            }
+            else if (jQuery) {
+                // Browser standard
+                factory(jQuery, jQuery.fn.dataTable);
+            }
+        }
+            (function ($, DataTable) {
+                'use strict';
+
+                if (!DataTable.ext.editorFields) {
+                    DataTable.ext.editorFields = {};
+                }
+
+                var _fieldTypes = DataTable.Editor ?
+                    DataTable.Editor.fieldTypes :
+                    DataTable.ext.editorFields;
+
+                _fieldTypes.bootstrap_select = {
+                    _addOptions: function (conf, options) {
+                        var elOpts = conf._input[0].options;
+                        elOpts.length = 0;
+                        if (options) {
+                            DataTable.Editor.pairs(options, conf.optionsPair, function (val, label, i) {
+                                elOpts[i] = new Option(label, val);
+                            });
+                        }
+                    },
+
+                    create: function (conf) {
+                        var editor = this;
+                        conf._input = $('<select/>')
+                            .attr($.extend({
+                                id: DataTable.Editor.safeId(conf.id),
+                                multiple: conf.multiple === true
+                            }, conf.attr || {}));
+
+                        if (conf.placeholder !== undefined) {
+                            conf._input.attr('title', conf.placeholder);
+                        }
+                        if (conf.placeholderValue !== undefined) {
+                            //not implemented
+                        }
+                        if (conf.placeholderDisabled !== undefined) {
+                            //not implemented
+                        }
+
+                        _fieldTypes.bootstrap_select._addOptions(conf, conf.options || conf.ipOpts);
+
+                        // On open, need to have the instance update now that it is in the DOM
+                        editor.on('open.bootstrap-select' + DataTable.Editor.safeId(conf.id), function () {
+                            conf._input.selectpicker($.extend({}, conf.opts,
+                                {
+                                    //Default options
+                                    width: '300px',
+                                }));
+                        });
+
+                        return conf._input[0];
+                    },
+
+                    update: function (conf, options) {
+                        _fieldTypes.bootstrap_select._addOptions(conf, options);
+                        $(conf._input).selectpicker('refresh');
+                    },
+
+                    get: function (conf) {
+                        var val = conf._input.val();
+                        return conf._input.prop('multiple') && val === null ?
+                            [] :
+                            val;
+                    },
+
+                    set: function (conf, val) {
+                        conf._input.val(val).trigger('change');
+                    },
+
+                    enable: function (conf) {
+                        $(conf._input).prop('disabled', false);
+                        $(conf._input).selectpicker('refresh');
+                    },
+
+                    disable: function (conf) {
+                        $(conf._input).prop('disabled', true);
+                        $(conf._input).selectpicker('refresh');
+                    },
+                };
+            }));
+
+    </script>
+}
+
+@section Footer2{
+    <!-- Page -->
+    <script src="~/global/js/Plugin/animate-list.js"></script>
+    <script src="~/global/js/Plugin/panel.js"></script>
+    <script src="~/assets/examples/js/layouts/panel-transition.js"></script>
+    <script src="~/global/js/Plugin/datatables.js"></script>
+    <script src="~/scripts/js/Master/Department.js"></script>
+    <script src="~/assets/examples/js/uikit/icon.js"></script>
+}

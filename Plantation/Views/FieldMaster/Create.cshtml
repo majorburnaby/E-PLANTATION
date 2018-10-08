@@ -1,0 +1,260 @@
+﻿@model Plantation.Models.DB.FieldMaster
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+@{
+    var message = TempData["successmessage"] ?? string.Empty;
+}
+
+@section Head{
+    <!-- Plugins -->
+    <link rel="stylesheet" href="~/assets/examples/css/layouts/panel-transition.css">
+    <link href="~/global/vendor/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/global/vendor/select2/select2.css" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/global/fonts/font-awesome/font-awesome.css">
+    <style>
+        .form-group.required .control-label:after {
+            content: "*";
+            color: red;
+        }
+    </style>
+}
+
+<div class="page">
+    <div class="page-header">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "FieldMaster")">Field Master</a></li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </div>
+    <div class="page-content">
+        <div class="panel panel-bordered">
+            <div class="panel-heading">
+                <h3 class="panel-title">CREATE FIELD MASTER</h3>
+                <div class="panel-actions">
+                    <a class="panel-action icon md-fullscreen" data-toggle="panel-fullscreen" aria-hidden="true"></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @using (Html.BeginForm("Create", "FieldMaster", FormMethod.Post))
+                    {
+                        <div class="col-xs-12 col-lg-6">
+                            @Html.ValidationSummary(true)
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Code</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.IDFIELDMASTER, new { @class = "form-control form-control-sm", placeholder = "ID Field", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.IDFIELDMASTER, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Name</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.FIELDMASTERNAME, new { @class = "form-control form-control-sm", placeholder = "Field Name", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.FIELDMASTERNAME, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Block Master</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.BLOCKMASTER, Model.GetSelectListBlockMaster, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.BLOCKMASTER, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Crop</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.CROPTYPE, Model.GetSelectListCrop, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.CROPTYPE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Planting Material</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.PLANTINGMATERIAL, Model.GetSelectListPlantingMaterial, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.PLANTINGMATERIAL, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Progeny</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.PROGENY, Model.GetSelectListProgeny, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.PROGENY, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Hectarage Planted</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.HECTPLANTED, new { @class = "form-control form-control-sm", placeholder = "Hectarage Planted", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.HECTPLANTED, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Planting Pointnum</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.PLANTINGPOINTNUM, new { @class = "form-control form-control-sm", placeholder = "Planting Pointnum", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.PLANTINGPOINTNUM, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Planting Distance</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.PLANTINGDISTANCE, Model.GetSelectListPlantingDistance, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.PLANTINGDISTANCE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Total Stand</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.TOTALSTAND, new { @class = "form-control form-control-sm", placeholder = "Total Stand", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.TOTALSTAND, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="col-xs-12 col-lg-6">
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Planting Date</label>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(x => x.PLANTINGDATE, new { @class = "form-control form-control-sm", placeholder = "Planting Date", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.PLANTINGDATE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">SPH</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.STANDPERHECT, new { @class = "form-control form-control-sm", placeholder = "SPH", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.STANDPERHECT, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Empty Hole</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.EMPTYHOLE, new { @class = "form-control form-control-sm", placeholder = "Empty Hole", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.EMPTYHOLE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Field Status</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.FIELDSTATUS, Model.GetSelectListFieldStatus, new { @class = "form-control form-control-sm", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.FIELDSTATUS, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Harvesting Date</label>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(x => x.HARVCOMMDATE, new { @class = "form-control form-control-sm", placeholder = "Harvesting Date", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.HARVCOMMDATE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Hectarage Harvest</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.HECTHARV, new { @class = "form-control form-control-sm", placeholder = "Hectarage Harvest", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.HECTHARV, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Carry Distance (M)</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.CARRYDISTANCE, new { @class = "form-control form-control-sm", placeholder = "Carry Distance", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.CARRYDISTANCE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Ownership</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.OWNERSHIP, Model.GetSelectListOwnership2, new { @class = "form-control form-control-sm", tabindex = "2" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Is Active ?</label>
+                                <div class="col-md-8">
+                                    @Html.CheckBoxFor(x => x.ISACTIVE, new { @class = "checkbox-custom", tabindex = "2" })
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary"><i class="icon fa-save" aria-hidden="true"></i> Save</button>
+                                    <button type="button" class="btn btn-default waves-effect" onclick="location.href='@Url.Action("Index", "FieldMaster")';return false;"><i class="icon fa-remove" aria-hidden="true"></i> Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer1{
+    <!-- Plugins -->
+    <script src="~/global/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
+    <script src="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
+    <script src="~/global/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="~/global/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
+    <script src="~/global/vendor/asrange/jquery-asRange.min.js"></script>
+    <script src="~/global/vendor/bootbox/bootbox.js"></script>
+    <script src="~/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/global/vendor/select2/select2.full.min.js"></script>
+    <script>
+        $('#PLANTINGDATE').datepicker({
+            format: 'mm/dd/yyyy',
+            autoclose: true
+        }).datepicker("setDate", new Date());
+
+    </script>
+    <script>
+        $('#HARVCOMMDATE').datepicker({
+            format: 'mm/dd/yyyy',
+            autoclose: true
+        }).datepicker("setDate", new Date());
+
+    </script>
+    <script>
+        $("#BLOCKMASTER").select2({ allowClear: true });
+        $("#CROPTYPE").select2({ allowClear: true });
+        $("#PLANTINGMATERIAL").select2({ allowClear: true });
+        $("#PROGENY").select2({ allowClear: true });
+        $("#PLANTINGDISTANCE").select2({ allowClear: true });
+        $("#FIELDSTATUS").select2({ allowClear: true });
+        $("#OWNERSHIP").select2({ allowClear: true });
+    </script>
+}
+@section Footer2{
+    <!-- Page -->
+    <script src="~/global/js/Plugin/animate-list.js"></script>
+    <script src="~/global/js/Plugin/panel.js"></script>
+    <script src="~/assets/examples/js/layouts/panel-transition.js"></script>
+    <script src="~/global/js/Plugin/datatables.js"></script>
+    <script src="~/scripts/js/Master/FieldMaster.js"></script>
+    <script src="~/assets/examples/js/uikit/icon.js"></script>
+    <script src="~/global/js/Plugin/select2.js"></script>
+}

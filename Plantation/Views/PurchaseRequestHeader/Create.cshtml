@@ -1,0 +1,144 @@
+﻿@model Plantation.Models.DB.PurchaseRequestHeader
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+
+@{
+    var message = TempData["successmessage"] ?? string.Empty;
+}
+
+
+@section Head{
+    <!-- Plugins -->
+    <link rel="stylesheet" href="~/assets/examples/css/layouts/panel-transition.css">
+    <link href="~/global/vendor/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/global/vendor/select2/select2.css" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/global/fonts/font-awesome/font-awesome.css">
+    <style>
+        .form-group.required .control-label:after {
+            content: "*";
+            color: red;
+        }
+    </style>
+}
+
+<div class="page">
+    <div class="page-header">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "PurchaseRequestHeader")">Purchase Request</a></li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol>
+    </div>
+    <div class="page-content">
+        <div class="panel panel-bordered">
+            <div class="panel-heading">
+                <h3 class="panel-title">PURCHASE REQUEST</h3>
+                <div class="panel-actions">
+                    <a class="panel-action icon md-fullscreen" data-toggle="panel-fullscreen" aria-hidden="true"></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @using (Html.BeginForm("Create", "PurchaseRequestHeader", FormMethod.Post))
+                    {
+                        <div class="col-xs-12 col-lg-6">
+                            @Html.ValidationSummary(true)
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Document No.</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.IDPURCHASEREQUEST, new { @class = "form-control form-control-sm", placeholder = "Document No.", tabindex = "1", disabled=true})
+                                    @*@Html.ValidationMessageFor(model => model.IDPURCHASEREQUEST, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-3 control-label">Date</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.PURCHASEREQUESTDATE, new { @class = "form-control form-control-sm", placeholder = "Date", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.PURCHASEREQUESTDATE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-3 control-label">Requestor</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(x => x.REQUESTORID, Model.GetSelectListRequestorID, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.REQUESTORID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="col-xs-12 col-lg-6">
+                            <div class="form-group required">
+                                <label class="col-sm-3 control-label">Priority</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(x => x.PRIORITY, Model.GetSelectListPriority, new { @class = "form-control form-control-sm", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.PRIORITY, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Remarks</label>
+                                <div class="col-md-9">
+                                    @Html.TextAreaFor(x => x.REMARKS, new { @class = "form-control form-control-sm", placeholder = "Remarks", tabindex = "20" })
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary" formaction="Create"><i class="icon fa-save" aria-hidden="true"></i> Save</button>
+                                    <button type="submit" class="btn btn-primary" formaction="CreateAndAddPurchaseRequestDetails"><i class="icon fa-save" aria-hidden="true"></i> Save & Add Details</button>
+                                    <button type="button" class="btn btn-default waves-effect" onclick="location.href='@Url.Action("Index", "PurchaseRequestHeader")';return false;"><i class="icon fa-remove" aria-hidden="true"></i> Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer1{
+    <!-- Plugins -->
+    <script src="~/global/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
+    <script src="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
+    <script src="~/global/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="~/global/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
+    <script src="~/global/vendor/asrange/jquery-asRange.min.js"></script>
+    <script src="~/global/vendor/bootbox/bootbox.js"></script>
+    <script src="~/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/global/vendor/select2/select2.full.min.js"></script>
+    <script>
+        $('#PURCHASEREQUESTDATE').datepicker({
+            format: 'mm/dd/yyyy',
+            autoclose: true
+        }).datepicker("setDate", new Date());
+
+        $("#REQUESTORID").select2({});
+        $("#PRIORITY").select2({});
+        var message = '@message';
+        if (message) {
+            bootbox.alert(message);
+            $(".select2-container--default").css("z-index", "0");
+        }
+
+    </script>
+}
+@section Footer2{
+    <!-- Page -->
+    <script src="~/global/js/Plugin/animate-list.js"></script>
+    <script src="~/global/js/Plugin/panel.js"></script>
+    <script src="~/assets/examples/js/layouts/panel-transition.js"></script>
+    <script src="~/global/js/Plugin/datatables.js"></script>
+    <script src="~/assets/examples/js/uikit/icon.js"></script>
+    <script src="~/global/js/Plugin/select2.js"></script>
+}

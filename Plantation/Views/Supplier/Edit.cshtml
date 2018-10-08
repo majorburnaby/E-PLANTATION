@@ -1,0 +1,240 @@
+﻿@model Plantation.Models.DB.Supplier
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+@section Head{
+    <!-- Plugins -->
+    <link rel="stylesheet" href="~/assets/examples/css/layouts/panel-transition.css">
+    <link href="~/global/vendor/select2/select2.css" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/global/fonts/font-awesome/font-awesome.css">
+    <style>
+        .form-group.required .control-label:after {
+            content: "*";
+            color: red;
+        }
+    </style>
+}
+
+<div class="page">
+    <div class="page-header">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Supplier")">Supplier</a></li>
+            <li class="breadcrumb-item active">Edit</li>
+        </ol>
+    </div>
+    <div class="page-content">
+        <div class="panel panel-bordered">
+            <div class="panel-heading">
+                <h3 class="panel-title">EDIT SUPPLIER</h3>
+                <div class="panel-actions">
+                    <a class="panel-action icon md-fullscreen" data-toggle="panel-fullscreen" aria-hidden="true"></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @using (Html.BeginForm("Edit", "Supplier", FormMethod.Post))
+                    {
+                        <div class="col-xs-12 col-lg-6">
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.SID)
+                            <div class="form-group required">
+                                <label class="col-sm-3 control-label">Code</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.IDSUPPLIER, new { @class = "form-control form-control-sm", placeholder = "ID Supplier", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.IDSUPPLIER, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-3 control-label">Name</label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(x => x.SUPPLIERNAME, new { @class = "form-control form-control-sm", placeholder = "Supplier Name", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.SUPPLIERNAME, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-3 control-label">Supplier Group</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(x => x.SUPPLIERGROUP, Model.GetSelectListSupplierGroup, new { @class = "form-control form-control-sm", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.SUPPLIERGROUP, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-3 control-label">Control Job</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(x => x.CONTROLJOB, Model.GetSelectListControlJob, new { @class = "form-control form-control-sm", tabindex = "3" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Contact Name</label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(x => x.CONTACTNAME, new { @class = "form-control form-control-sm", placeholder = "Contact Name", tabindex = "4" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-3 control-label">Address</label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(x => x.ADDRESS, new { @class = "form-control form-control-sm", placeholder = "Address", tabindex = "5" })
+                                    @Html.ValidationMessageFor(model => model.ADDRESS, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Phone</label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(x => x.PHONE, new { @class = "form-control form-control-sm", placeholder = "Phone", tabindex = "16" })
+                                </div>
+                                <label class="col-sm-1 control-label">Fax</label>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(x => x.FAX, new { @class = "form-control form-control-sm", placeholder = "Fax", tabindex = "17" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Is Active ?</label>
+                                <div class="col-md-9">
+                                    @Html.CheckBoxFor(x => x.ISACTIVE, new { @class = "checkbox-custom", tabindex = "6" })
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="col-xs-12 col-lg-6">
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label">Country</label>
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(x => x.COUNTRY, Model.GetSelectListCountry, new { @class = "form-control form-control-sm", tabindex = "11" })
+                                    @Html.ValidationMessageFor(model => model.COUNTRY, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label">Province</label>
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(x => x.PROVINCE, Model.GetSelectListProvince, new { @class = "form-control form-control-sm", tabindex = "12" })
+                                    @Html.ValidationMessageFor(model => model.PROVINCE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label">City</label>
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(x => x.CITY, Model.GetSelectListCity, new { @class = "form-control form-control-sm", tabindex = "13" })
+                                    @Html.ValidationMessageFor(model => model.CITY, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Bank</label>
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(x => x.BANK, Model.GetSelectListBank, new { @class = "form-control form-control-sm", tabindex = "14" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Account</label>
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(x => x.BANKACCOUNT, new { @class = "form-control form-control-sm", placeholder = "Bank Account", tabindex = "15" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Email</label>
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(x => x.EMAIL, new { @class = "form-control form-control-sm", placeholder = "Email", tabindex = "18" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Postal Code</label>
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(x => x.POSCODE, new { @class = "form-control form-control-sm", placeholder = "Postal Code", tabindex = "19" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Remarks</label>
+                                <div class="col-md-10">
+                                    @Html.TextAreaFor(x => x.REMARKS, new { @class = "form-control form-control-sm", placeholder = "Remarks", tabindex = "20" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary"><i class="icon fa-save" aria-hidden="true"></i> Save</button>
+                                    <button type="button" class="btn btn-default waves-effect" onclick="location.href='@Url.Action("Index", "Supplier")';return false;"><i class="icon fa-remove" aria-hidden="true"></i> Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer1{
+    <!-- Plugins -->
+    <script src="~/global/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
+    <script src="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
+    <script src="~/global/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="~/global/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
+    <script src="~/global/vendor/asrange/jquery-asRange.min.js"></script>
+    <script src="~/global/vendor/bootbox/bootbox.js"></script>
+    <script src="~/global/vendor/select2/select2.full.min.js"></script>
+    <script type="text/javascript">
+
+        $("#COUNTRY").change(function () {
+            var countryid = $('#COUNTRY').val() === "" ? 0 : $('#COUNTRY').val();
+            console.info(countryid);
+            $.getJSON('@Url.Action("GetProvinceByCountry", "Supplier")', { Country: countryid }, function (json) {
+                $('#PROVINCE').empty();
+                $('#PROVINCE').append($('<option>').text("--Select Province--").attr('value', ''));
+                $.each(json, function (i, obj) {
+                    $('#PROVINCE').append($('<option>').text(obj.PROVINCENAME).attr('value', obj.SID));
+                });
+
+                $('#PROVINCE').change();
+            });
+        })
+
+        $("#PROVINCE").change(function () {
+            var provinceid = $('#PROVINCE').val() === "" ? 0 : $('#PROVINCE').val();
+            $.getJSON('@Url.Action("GetCityByProvince", "Supplier")', { Province: provinceid }, function (json) {
+                $('#CITY').empty();
+                $('#CITY').append($('<option>').text("--Select City--").attr('value', ''));
+                $.each(json, function (i, obj) {
+                    $('#CITY').append($('<option>').text(obj.CITYNAME).attr('value', obj.SID));
+                });
+            });
+        })
+    </script>
+    <script type="text/javascript">
+        $("#COUNTRY").select2({ allowClear: true });
+        $("#PROVINCE").select2({ allowClear: true });
+        $("#CITY").select2({ allowClear: true });
+        $("#CONTRACTORGROUP").select2({ allowClear: true });
+        $("#CONTROLJOB").select2({ allowClear: true });
+        $("#BANK").select2({ allowClear: true });
+    </script>
+}
+
+@section Footer2{
+    <!-- Page -->
+    <script src="~/global/js/Plugin/animate-list.js"></script>
+    <script src="~/global/js/Plugin/panel.js"></script>
+    <script src="~/assets/examples/js/layouts/panel-transition.js"></script>
+    <script src="~/global/js/Plugin/datatables.js"></script>
+    <script src="~/scripts/js/Master/Supplier.js"></script>
+    <script src="~/assets/examples/js/uikit/icon.js"></script>
+    <script src="~/global/js/Plugin/select2.js"></script>
+}

@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Plantation.Models.DB.Customer> 
+@{
+    ViewBag.Title = "Customer";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+@section Head{
+    <!-- Plugins -->
+    <link rel="stylesheet" href="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.css">
+    <link rel="stylesheet" href="~/global/vendor/datatables-responsive/dataTables.responsive.css">
+    <link rel="stylesheet" href="~/assets/examples/css/tables/datatable.css">
+    <link rel="stylesheet" href="~/assets/examples/css/layouts/panel-transition.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/global/fonts/font-awesome/font-awesome.css">
+}
+
+@{
+    var message = TempData["successmessage"] ?? string.Empty;
+}
+
+
+<div class="page">
+    <div class="page-content">
+        <div class="panel panel-bordered">
+            <div class="panel-heading">
+                <h3 class="panel-title">CUSTOMER</h3>
+                <div class="panel-actions">
+                    <a class="panel-action icon md-refresh-alt" data-toggle="panel-refresh" data-load-type="blue-only"
+                       data-load-callback="customRefreshCallback" aria-hidden="true"></a>
+                    <a class="panel-action icon md-minus" aria-expanded="true" data-toggle="panel-collapse"
+                       aria-hidden="true"></a>
+                    <a class="panel-action icon md-fullscreen" data-toggle="panel-fullscreen" aria-hidden="true"></a>
+                    <a class="panel-action icon md-close" data-toggle="panel-close" aria-hidden="true"></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div style="overflow-x: scroll;">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                            <div class="m-b-15">
+                                <button id="addToTable" class="btn btn-primary" type="button" onclick="location.href='@Url.Action("Create", "Customer")';return false;">
+                                    <i class="icon md-plus" aria-hidden="true"></i> Add Row
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-hover table-striped" cellspacing="0" id="tbldata">
+                        <thead>
+                            <tr>
+                                <th style="display:none">#</th>
+                                <th style="text-align:center;">CODE</th>
+                                <th style="text-align:center;">NAME</th>
+                                <th style="text-align:center;">GROUP</th>
+                                <th style="text-align:center;">CONTACT NAME</th>
+                                <th style="text-align:center;">ADDRESS</th>
+                                <th style="text-align:center;">BANK</th>
+                                <th style="text-align:center;">BANK ACCOUNT</th>
+                                <th style="text-align:center;">PHONE</th>
+                                <th style="text-align:center;">ACTIVE</th>
+                                <th style="text-align:center;">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var customer in Model)
+                            {
+                            <tr class="gradeA">
+                                <td style="display:none" class="SID">@customer.SID</td>
+                                <td style="text-align:center;" class="IDCustomer">@customer.IDCUSTOMER</td>
+                                <td class="CUSTOMERNAME">@customer.CUSTOMERNAME</td>
+                                <td> @customer.CUSTOMERGROUP</td>
+                                <td class="CONTACTNAME">@customer.CONTACTNAME</td>
+                                <td>@customer.ADDRESS</td>
+                                <td> @customer.PARAMETERVALUENAME</td>
+                                <td> @customer.BANKACCOUNT</td>
+                                <td> @customer.PHONE</td>
+                                <td style="text-align:center;" class="ACTIVE">
+                                    @if (customer.ISACTIVE == true)
+                                    {
+                                        <input type="checkbox" class="checkbox-custom" checked="checked" value="@customer.ISACTIVE" disabled />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="checkbox-custom" id="ACTIVE" value="@customer.ISACTIVE" disabled />
+                                    }
+                                </td>
+                                <td style="text-align:center;" class="actions">
+                                    <a href="#" type="button" class="btn btn-sm btn-icon btn-pure btn-default on-editing save-row"
+                                       data-toggle="tooltip" data-original-title="Save" hidden><i class="icon md-check-all" aria-hidden="true"></i></a>
+                                    <a href="#" type="button" class="btn btn-sm btn-icon btn-pure btn-default on-editing cancel-row"
+                                       data-toggle="tooltip" data-original-title="Delete" hidden><i class="icon md-close" aria-hidden="true"></i></a>
+                                    <a href="#" type="button" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row"
+                                       data-toggle="tooltip" data-original-title="Edit" onclick="location.href='@Url.Action("Edit", "Customer", new { id = customer.SID })';return false;"><i class="icon md-edit" aria-hidden="true"></i></a>
+                                    <a href="#" type="button" class="btn btn-sm btn-icon btn-pure btn-default on-default remove-row"
+                                       data-toggle="tooltip" data-original-title="Remove" data-content="@customer.SID"><i class="icon md-delete" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Panel Table Add Ro -->
+
+@section Footer1{
+    <!-- Plugins -->
+    <script src="~/global/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
+    <script src="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
+    <script src="~/global/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="~/global/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
+    <script src="~/global/vendor/asrange/jquery-asRange.min.js"></script>
+    <script src="~/global/vendor/bootbox/bootbox.js"></script>
+
+    <script type="text/javascript">
+                var message = '@message';
+                if (message)
+                    bootbox.alert(message);
+    </script>
+}
+
+@section Footer2{
+    <!-- Page -->
+    <script src="~/global/js/Plugin/animate-list.js"></script>
+    <script src="~/global/js/Plugin/panel.js"></script>
+    <script src="~/assets/examples/js/layouts/panel-transition.js"></script>
+    <script src="~/global/js/Plugin/datatables.js"></script>
+    <script src="~/scripts/js/Master/Customer.js"></script>
+    <script src="~/assets/examples/js/uikit/icon.js"></script>
+}

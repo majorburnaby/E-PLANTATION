@@ -1,0 +1,195 @@
+﻿@model Plantation.Models.DB.EmployeeGang
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+@section Head{
+    <!-- Plugins -->
+    <link rel="stylesheet" href="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.css">
+    <link rel="stylesheet" href="~/global/vendor/datatables-responsive/dataTables.responsive.css">
+    <link rel="stylesheet" href="~/assets/examples/css/tables/datatable.css">
+    <link rel="stylesheet" href="~/assets/examples/css/layouts/panel-transition.css">
+    <link href="~/global/vendor/select2/select2.css" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/global/fonts/font-awesome/font-awesome.css">
+    <style>
+        .form-group.required .control-label:after {
+            content: "*";
+            color: red;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+}
+
+<div class="page">
+    <div class="page-header">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "EmployeeGang")">Employee Gang</a></li>
+            <li class="breadcrumb-item active">Edit - @Model.EMPLOYEEGANGNAME</li>
+        </ol>
+    </div>
+    <div class="page-content">
+        <div class="panel panel-bordered">
+            <div class="panel-heading">
+                <h3 class="panel-title">EDIT EMPLOYEE GANG</h3>
+                <div class="panel-actions">
+                    <a class="panel-action icon md-refresh-alt" data-toggle="panel-refresh" data-load-type="blue-only"
+                       data-load-callback="customRefreshCallback" aria-hidden="true"></a>
+                    <a class="panel-action icon md-minus" aria-expanded="true" data-toggle="panel-collapse"
+                       aria-hidden="true"></a>
+                    <a class="panel-action icon md-fullscreen" data-toggle="panel-fullscreen" aria-hidden="true"></a>
+                    <a class="panel-action icon md-close" data-toggle="panel-close" aria-hidden="true"></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @using (Html.BeginForm("Edit", "EmployeeGang", FormMethod.Post))
+                    {
+                        <div class="col-xs-12 col-lg-6">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.SID)
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Code</label>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(x => x.IDEMPLOYEEGANG, new { @class = "form-control form-control-sm", placeholder = "Code", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.IDEMPLOYEEGANG, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Name</label>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(x => x.EMPLOYEEGANGNAME, new { @class = "form-control form-control-sm", placeholder = "Name", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.EMPLOYEEGANGNAME, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Foreman 1</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.FOREMAN1, Model.GetSelectListForeman1, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.FOREMAN1, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Foreman</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.FOREMAN, Model.GetSelectListForeman, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.FOREMAN, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="col-xs-12 col-lg-6">
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Admin</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.ADMIN, Model.GetSelectListAdmin, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.ADMIN, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Gang Type</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.GANGTYPE, Model.GetSelectListGangType, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.GANGTYPE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Afdeling</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.BLOCKORGANIZATION, Model.GetSelectListBlockOrganization, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.BLOCKORGANIZATION, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary"><i class="icon fa-save" aria-hidden="true"></i> Save</button>
+                                    <button type="button" class="btn btn-default waves-effect" onclick="location.href='@Url.Action("Index", "EmployeeGang")';return false;"><i class="icon fa-remove" aria-hidden="true"></i> Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <ul class="nav nav-tabs nav-tabs-line">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#rotabs1">Gang Detail</a></li>
+                    </ul>
+                    <div class="tab-content" style="padding-bottom:15px">
+                        <div class="tab-pane fade in active" id="rotabs1">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-6">
+                                        <div class="m-b-15">
+                                            <button id="addToTable" class="btn btn-primary" type="button">
+                                                <i class="icon md-plus" aria-hidden="true"></i> Add Row
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divblockusage">
+                                    <table class="table table-bordered table-hover table-striped" cellspacing="0" id="tbldata" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="display:none">#</th>
+                                                <th style="text-align:center;">EMPLOYEE</th>
+                                                <th style="text-align:center;">ACTION</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer1{
+    <!-- Plugins -->
+    <script src="~/global/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
+    <script src="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
+    <script src="~/global/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="~/global/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
+    <script src="~/global/vendor/asrange/jquery-asRange.min.js"></script>
+    <script src="~/global/vendor/bootbox/bootbox.js"></script>
+    <script src="~/global/vendor/select2/select2.full.min.js"></script>
+    <script>
+        $("#FOREMAN1").select2({ allowClear: true });
+        $("#FOREMAN").select2({ allowClear: true });
+        $("#ADMIN").select2({ allowClear: true });
+        $("#GANGTYPE").select2({ allowClear: true });
+        $("#BLOCKORGANIZATION").select2({ allowClear: true });
+    </script>
+}
+
+@section Footer2{
+    <!-- Page -->
+    <script src="~/global/js/Plugin/animate-list.js"></script>
+    <script src="~/global/js/Plugin/panel.js"></script>
+    <script src="~/assets/examples/js/layouts/panel-transition.js"></script>
+    <script src="~/global/js/Plugin/datatables.js"></script>
+    <script src="~/assets/examples/js/tables/datatable.js"></script>
+    <script src="~/assets/examples/js/uikit/icon.js"></script>
+    <script src="~/scripts/js/Master/EmployeeGangDetail.js"></script>
+    <script src="~/global/js/Plugin/select2.js"></script>
+}
+
+
+
+

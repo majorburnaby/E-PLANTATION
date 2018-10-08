@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "BlockMaster";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+@section Head{
+    <!-- Plugins -->
+    <link rel="stylesheet" href="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.css">
+    <link rel="stylesheet" href="~/global/vendor/datatables-responsive/dataTables.responsive.css">
+    <link rel="stylesheet" href="~/assets/examples/css/tables/datatable.css">
+    <link rel="stylesheet" href="~/assets/examples/css/layouts/panel-transition.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/global/fonts/font-awesome/font-awesome.css">
+    <link href="~/assets/css/datatables.editor/editor.dataTables.min.css" rel="stylesheet">
+    <style>
+        .center {
+            text-align: center;
+        }
+    </style>
+
+}
+
+<div class="page">
+    <div class="page-content">
+        <div class="panel panel-bordered">
+            <div class="panel-heading">
+                <h3 class="panel-title">BLOCK MASTER</h3>
+                <div class="panel-actions">
+                    <a class="panel-action icon md-refresh-alt" data-toggle="panel-refresh" data-load-type="blue-only"
+                        data-load-callback="customRefreshCallback" aria-hidden="true"></a>
+                    <a class="panel-action icon md-minus" aria-expanded="true" data-toggle="panel-collapse"
+                        aria-hidden="true"></a>
+                    <a class="panel-action icon md-fullscreen" data-toggle="panel-fullscreen" aria-hidden="true"></a>
+                    <a class="panel-action icon md-close" data-toggle="panel-close" aria-hidden="true"></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="m-b-15">
+                            <button id="addToTable" class="btn btn-primary"  onclick="location.href='@Url.Action("Create", "BlockMaster")';return false;" type="button">
+                                <i class="icon md-plus" aria-hidden="true"></i> Add Row
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered table-hover table-striped" cellspacing="0" id="tbldata" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th style="display:none">#</th>
+                            <th style="text-align:center;">CODE</th>
+                            <th style="text-align:center;">NAME</th>
+                            <th style="text-align:center;">LAND CONCESSION</th>
+                            <th style="text-align:center;">SOIL TYPE</th>
+                            <th style="text-align:center;">VEGETATION</th>
+                            <th style="text-align:center;">TOPOGRAPH</th>
+                            <th style="text-align:center;">HECTARAGE</th>
+                            <th style="text-align:center;">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var obj in Model)
+                        {
+                        <tr class="gradeA">
+                            <td style="text-align:center;display:none;">@obj.SID</td>
+                            <td style="text-align:center;">@obj.IDBLOCKMASTER</td>
+                            <td>@obj.BLOCKMASTERNAME</td>
+                            <td>@obj.CONCESSIONNAME</td>
+                            <td>@obj.SOILTYPENAME</td>
+                            <td>@obj.VEGETATIONNAME</td>
+                            <td>@obj.TOPOGRAPHNAME</td>
+                            <td style="text-align:center;">@obj.HECTARAGE</td>
+                            <td class="actions" style="text-align:center;">
+                                <a href="#" class="btn btn-sm btn-icon btn-pure btn-default on-editing save-row"
+                                   data-toggle="tooltip" data-original-title="Save" hidden><i class="icon md-wrench" aria-hidden="true"></i></a>
+                                <a href="#" class="btn btn-sm btn-icon btn-pure btn-default on-editing cancel-row"
+                                   data-toggle="tooltip" data-original-title="Delete" hidden><i class="icon md-close" aria-hidden="true"></i></a>
+                                <a href="#" type="button" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row"
+                                   data-toggle="tooltip" data-original-title="Edit" onclick="location.href='@Url.Action("Edit", "BlockMaster", new { id = obj.SID })';"><i class="icon md-edit" aria-hidden="true"></i></a>
+                                <a href="#" type="button" class="btn btn-sm btn-icon btn-pure btn-default on-default remove-row"
+                                   data-toggle="tooltip" data-original-title="Remove" data-content="@obj.SID"><i class="icon md-delete" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Panel Table Add Ro -->
+
+@section Footer1{
+    <!-- Plugins -->
+    <script src="~/global/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
+    <script src="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
+    <script src="~/global/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="~/global/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
+    <script src="~/global/vendor/asrange/jquery-asRange.min.js"></script>
+    <script src="~/global/vendor/bootbox/bootbox.js"></script>
+    <script src="~/scripts/datatables.editor/dataTables.editor.min.js"></script>
+}
+
+@section Footer2{
+    <!-- Page -->
+    <script src="~/global/js/Plugin/animate-list.js"></script>
+    <script src="~/global/js/Plugin/panel.js"></script>
+    <script src="~/assets/examples/js/layouts/panel-transition.js"></script>
+    <script src="~/global/js/Plugin/datatables.js"></script>
+    <script src="~/scripts/js/Master/BlockMaster.js"></script>
+    <script src="~/assets/examples/js/uikit/icon.js"></script>
+}

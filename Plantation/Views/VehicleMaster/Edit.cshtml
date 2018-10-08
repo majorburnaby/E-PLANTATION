@@ -1,0 +1,158 @@
+﻿@model Plantation.Models.DB.VehicleMaster
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+@section Head{
+    <!-- Plugins -->
+    <link rel="stylesheet" href="~/assets/examples/css/layouts/panel-transition.css">
+    <link href="~/global/vendor/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/global/vendor/select2/select2.css" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/global/fonts/font-awesome/font-awesome.css">
+    <style>
+        .form-group.required .control-label:after {
+            content: "*";
+            color: red;
+        }
+    </style>
+}
+
+<div class="page">
+    <div class="page-header">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "VehicleMaster")">Vehicle</a></li>
+            <li class="breadcrumb-item active">Edit</li>
+        </ol>
+    </div>
+    <div class="page-content">
+        <div class="panel panel-bordered">
+            <div class="panel-heading">
+                <h3 class="panel-title">EDIT VEHICLE</h3>
+                <div class="panel-actions">
+                    <a class="panel-action icon md-fullscreen" data-toggle="panel-fullscreen" aria-hidden="true"></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @using (Html.BeginForm("Edit", "VehicleMaster", FormMethod.Post))
+                    {
+                        <div class="col-xs-12 col-lg-6">
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.SID)
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">ID Vehicle</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.IDVEHICLE, new { @readonly = true, @class = "form-control form-control-sm", placeholder = "ID Vehicle", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.IDVEHICLE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Vehicle Name</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.VEHICLENAME, new { @class = "form-control form-control-sm", placeholder = "Vehicle Name", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.VEHICLENAME, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Vehicle Group</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.VEHICLEGROUP, Model.GetSelectListVehicleGroup, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                    @Html.ValidationMessageFor(model => model.VEHICLEGROUP, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group required">
+                                <label class="col-sm-4 control-label">Ownership</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.OWNERSHIP, Model.GetSelectListOwnership, new { @class = "form-control form-control-sm", tabindex = "1" })
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="col-xs-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Fixed Asset</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.FIXEDASSET, Model.GetSelectListFixedAsset, new { @class = "form-control form-control-sm", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.FIXEDASSET, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Purchase Date</label>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(x => x.PURCHASEDATE, new { @class = "form-control form-control-sm", placeholder = "Purchase Date", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.PURCHASEDATE, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Purchase Cost</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(x => x.PURCHASECOST, new { @class = "form-control form-control-sm", placeholder = "Vehicle Name", tabindex = "2" })
+                                    @Html.ValidationMessageFor(model => model.PURCHASECOST, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Is Active ?</label>
+                                <div class="col-md-8">
+                                    @Html.CheckBoxFor(x => x.ISACTIVE, new { @class = "checkbox-custom", tabindex = "1" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary"><i class="icon fa-save" aria-hidden="true"></i> Save</button>
+                                    <button type="button" class="btn btn-default waves-effect" onclick="location.href='@Url.Action("Index", "VehicleMaster")';return false;"><i class="icon fa-remove" aria-hidden="true"></i> Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Footer1{
+    <!-- Plugins -->
+    <script src="~/global/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="~/global/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
+    <script src="~/global/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
+    <script src="~/global/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="~/global/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
+    <script src="~/global/vendor/asrange/jquery-asRange.min.js"></script>
+    <script src="~/global/vendor/bootbox/bootbox.js"></script>
+    <script src="~/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/global/vendor/select2/select2.full.min.js"></script>
+    <script>
+        $('#PURCHASEDATE').datepicker({
+            format: 'mm/dd/yyyy',
+            autoclose: true
+        }).datepicker("setDate", new Date());
+
+    </script>
+    <script type="text/javascript">
+        $("#VEHICLEGROUP").select2({ allowClear: true });
+        $("#OWNERSHIP").select2({ allowClear: true });
+        $("#FIXEDASSET").select2({ allowClear: true });
+    </script>
+}
+
+@section Footer2{
+    <!-- Page -->
+    <script src="~/global/js/Plugin/animate-list.js"></script>
+    <script src="~/global/js/Plugin/panel.js"></script>
+    <script src="~/assets/examples/js/layouts/panel-transition.js"></script>
+    <script src="~/global/js/Plugin/datatables.js"></script>
+    <script src="~/scripts/js/Master/Vehicle.js"></script>
+    <script src="~/assets/examples/js/uikit/icon.js"></script>
+    <script src="~/global/js/Plugin/select2.js"></script>
+    <script src="~/global/js/Plugin/bootstrap-datepicker.js"></script>
+}

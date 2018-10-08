@@ -1,0 +1,57 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
+
+
+namespace Plantation.Models.DB
+{
+    public class Supplier
+    {
+        [Required]
+        public int SID { get; set; }
+        [Required]
+        public string IDSUPPLIER { get; set; }
+        [Required]
+        public string SUPPLIERNAME { get; set; }
+        [Required]
+        public int SUPPLIERGROUP { get; set; }
+        [Required]
+        public int CONTROLJOB { get; set; }
+        public string CONTACTNAME { get; set; }
+        public string BANK { get; set; }
+        public string BANKACCOUNT { get; set; }
+        public string PHONE { get; set; }
+        public string FAX { get; set; }
+        public string EMAIL { get; set; }
+        [Required]
+        public string ADDRESS { get; set; }
+        [Required]
+        public int COUNTRY { get; set; }
+        [Required]
+        public int PROVINCE { get; set; }
+        [Required]
+        public int CITY { get; set; }
+        public string POSCODE { get; set; }
+        public string REMARKS { get; set; }
+        public bool ISACTIVE { get; set; }
+        public System.DateTime ISACTIVEDATE { get; set; }
+        public int COMPANY { get; set; }
+        public int COMPANYSITE { get; set; }
+        public int INPUTBY { get; set; }
+        public System.DateTime INPUTDATE { get; set; }
+        public int UPDATEBY { get; set; }
+        public System.DateTime UPDATEDATE { get; set; }
+        public string ITEMDESCRIPTION { get; set; }
+        public string SUPPLIERGROUPNAME { get; set; }
+        public string PARAMETERVALUENAME { get; set; }
+        public string COUNTRYNAME { get; set; }
+        public string PROVINCENAME { get; set; }
+        public string CITYNAME { get; set; }
+
+        public SelectList GetSelectListSupplierGroup { get; set; }
+        public SelectList GetSelectListControlJob { get; set; }
+        public SelectList GetSelectListCountry { get; set; }
+        public SelectList GetSelectListProvince { get; set; }
+        public SelectList GetSelectListCity { get; set; }
+        public SelectList GetSelectListBank { get; set; }
+    }
+}
